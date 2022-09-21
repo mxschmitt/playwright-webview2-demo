@@ -13,16 +13,16 @@ public class WebView2Process {
   public int cdpPort;
   private Path _dataDir;
   private Process _process;
+  private Path _executablePath = Path.of("../webview2-app/bin/Debug/net6.0-windows/webview2.exe");
 
   public WebView2Process() throws IOException {
     cdpPort = nextFreePort();
     _dataDir = Files.createTempDirectory("pw-java-webview2-tests-");
-    Path executable = Path.of("../webview2-app/bin/Debug/net6.0-windows/webview2.exe");
 
-    if (!Files.exists(executable)) {
-      throw new RuntimeException("Executable not found: " + executable);
+    if (!Files.exists(_executablePath)) {
+      throw new RuntimeException("Executable not found: " + _executablePath);
     }
-    ProcessBuilder pb = new ProcessBuilder().command(executable.toAbsolutePath().toString());
+    ProcessBuilder pb = new ProcessBuilder().command(_executablePath.toAbsolutePath().toString());
     Map<String, String> envMap = pb.environment();
     envMap.put("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--remote-debugging-port=" + cdpPort);
     envMap.put("WEBVIEW2_USER_DATA_FOLDER", _dataDir.toString());

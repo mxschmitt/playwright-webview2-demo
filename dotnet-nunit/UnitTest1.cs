@@ -25,20 +25,20 @@ public class WebView2Test : PlaywrightTest
     public IPage Page { get; internal set; } = null!;
     private Process? _webView2Process = null;
     private string _userDataDir = null!;
+    private string _executablePath = Path.Join(Directory.GetCurrentDirectory(), @"..\..\..\..\webview2-app\bin\Debug\net6.0-windows\webview2.exe");
 
     [SetUp]
     public async Task BrowserSetUp()
     {
         var cdpPort = 10000 + WorkerIndex;
-        var executable = Path.Join(Directory.GetCurrentDirectory(), @"..\..\..\..\webview2-app\bin\Debug\net6.0-windows\webview2.exe");
-        Assert.IsTrue(File.Exists(executable), "Make sure that the executable exists");
+        Assert.IsTrue(File.Exists(_executablePath), "Make sure that the executable exists");
         _userDataDir = Path.Join(Path.GetTempPath(), $"playwright-webview2-tests/user-data-dir-{TestContext.CurrentContext.WorkerId}");
         // WebView2 does some lazy cleanups on shutdown so we can't clean it up after each test
         if (Directory.Exists(_userDataDir))
         {
             Directory.Delete(_userDataDir, true);
         }
-        _webView2Process = Process.Start(new ProcessStartInfo(executable)
+        _webView2Process = Process.Start(new ProcessStartInfo(_executablePath)
         {
             EnvironmentVariables =
         {

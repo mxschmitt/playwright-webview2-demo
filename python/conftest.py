@@ -6,6 +6,16 @@ from pathlib import Path
 from playwright.sync_api import Playwright, Browser, BrowserContext
 import subprocess
 
+EXECUTABLE_PATH = (
+    Path(__file__).parent
+    / ".."
+    / "webview2-app"
+    / "bin"
+    / "Debug"
+    / "net6.0-windows"
+    / "webview2.exe"
+)
+
 
 @pytest.fixture(scope="session")
 def data_dir():
@@ -19,15 +29,7 @@ def data_dir():
 def webview2_process_cdp_port(data_dir: str):
     cdp_port = _find_free_port()
     process = subprocess.Popen(
-        [
-            Path(__file__).parent
-            / ".."
-            / "webview2-app"
-            / "bin"
-            / "Debug"
-            / "net6.0-windows"
-            / "webview2.exe",
-        ],
+        [EXECUTABLE_PATH],
         env={
             **dict(os.environ),
             "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS": f"--remote-debugging-port={cdp_port}",
@@ -64,13 +66,14 @@ def page(context: BrowserContext):
     page = context.pages[0]
     yield page
 
-def _find_free_port( port=9000, max_port=65535 ):
+
+def _find_free_port(port=9000, max_port=65535):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     while port <= max_port:
         try:
-            sock.bind(('', port))
+            sock.bind(("", port))
             sock.close()
             return port
         except OSError:
             port += 1
-    raise IOError('no free ports')
+    raise IOError("no free ports")
