@@ -1,4 +1,5 @@
 import os
+import socket
 import tempfile
 import pytest
 from pathlib import Path
@@ -16,7 +17,7 @@ def data_dir():
 
 @pytest.fixture(scope="session")
 def webview2_process_cdp_port(data_dir: str):
-    cdp_port = 9222
+    cdp_port = _find_free_port()
     process = subprocess.Popen(
         [
             Path(__file__).parent
@@ -62,3 +63,14 @@ def context(browser: Browser):
 def page(context: BrowserContext):
     page = context.pages[0]
     yield page
+
+def _find_free_port( port=9000, max_port=65535 ):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    while port <= max_port:
+        try:
+            sock.bind(('', port))
+            sock.close()
+            return port
+        except OSError:
+            port += 1
+    raise IOError('no free ports')

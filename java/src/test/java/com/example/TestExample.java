@@ -24,9 +24,8 @@ public class TestExample {
   @BeforeAll
   static void launchBrowser() throws IOException {
     playwright = Playwright.create();
-    int cdpPort = 9222;
-    webview2Process = new WebView2Process(cdpPort);
-    browser = playwright.chromium().connectOverCDP("http://127.0.0.1:" + cdpPort);
+    webview2Process = new WebView2Process();
+    browser = playwright.chromium().connectOverCDP("http://127.0.0.1:" + webview2Process.cdpPort);
     context = browser.contexts().get(0);
     page = context.pages().get(0);
   }
