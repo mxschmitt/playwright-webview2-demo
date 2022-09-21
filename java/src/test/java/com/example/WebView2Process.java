@@ -12,7 +12,7 @@ public class WebView2Process {
     private Process _process;
 
     public WebView2Process(int port) throws IOException {
-        this._dataDir = Files.createTempDirectory("pw-java-webview2-tests-");
+        _dataDir = Files.createTempDirectory("pw-java-webview2-tests-");
         Path executable = Path.of("../webview2-app/bin/Debug/net6.0-windows/webview2.exe");
         
         if (!Files.exists(executable)) {
@@ -21,10 +21,10 @@ public class WebView2Process {
         ProcessBuilder pb = new ProcessBuilder().command(executable.toAbsolutePath().toString());
         Map<String, String> envMap = pb.environment();
         envMap.put("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--remote-debugging-port=" + port);
-        envMap.put("WEBVIEW2_USER_DATA_FOLDER", this._dataDir.toString());
-        this._process = pb.start();
+        envMap.put("WEBVIEW2_USER_DATA_FOLDER", _dataDir.toString());
+        _process = pb.start();
         // wait until "WebView2 initialized" got printed
-        BufferedReader reader = new BufferedReader(new InputStreamReader(this._process.getInputStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(_process.getInputStream()));
         while (true) {
             String line = reader.readLine();
             if (line == null) {
@@ -37,9 +37,9 @@ public class WebView2Process {
     }
 
     public void dispose() {
-        this._process.destroy();
+        _process.destroy();
         try {
-            this._process.waitFor();
+            _process.waitFor();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
