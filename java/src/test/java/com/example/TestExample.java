@@ -41,6 +41,5 @@ public class TestExample {
     page.navigate("https://playwright.dev");
     Locator gettingStarted = page.locator("text=Get started");
     assertThat(gettingStarted).isVisible();
-    page.pause();
   }
 }

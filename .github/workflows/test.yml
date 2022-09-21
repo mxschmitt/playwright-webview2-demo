@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build
+        run: dotnet build
+        working-directory: webview2-app
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: webview2-app
+          path: webview2-app/bin/
+
+  test-nodejs:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: webview2-app
+          path: webview2-app/bin/
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install
+        run: npm ci
+        working-directory: node
+      - name: Test
+        run: npx playwright test
+        working-directory: node
+
+  test-dotnet:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: webview2-app
+          path: webview2-app/bin/
+      - uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+      - name: Test
+        run: dotnet test
+        working-directory: dotnet-nunit
+
+  test-java:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: webview2-app
+          path: webview2-app/bin/
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'microsoft'
+          java-version: '17'
+      - name: Test
+        run: mvn test
+        working-directory: java
+
+  test-python:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: webview2-app
+          path: webview2-app/bin/
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install
+        run: pip install -r requirements.txt
+        working-directory: python
+      - name: Test
+        run: pytest
+        working-directory: python
+

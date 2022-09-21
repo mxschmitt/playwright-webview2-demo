@@ -13,8 +13,6 @@ public class Tests : WebView2Test
     {
         await Page.GotoAsync("https://playwright.dev");
 
-        await Page.PauseAsync();
-
         var getStarted = Page.Locator("text=Get Started");
         await Expect(getStarted).ToBeVisibleAsync();
     }
