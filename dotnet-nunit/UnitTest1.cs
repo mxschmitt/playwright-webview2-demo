@@ -50,7 +50,8 @@ public class WebView2Test : PlaywrightTest
         while (!_webView2Process!.HasExited)
         {
             var output = await _webView2Process!.StandardOutput.ReadLineAsync();
-            if (_webView2Process!.HasExited) {
+            if (_webView2Process!.HasExited)
+            {
                 throw new Exception("WebView2 process exited unexpectedly");
             }
             if (output != null && output.Contains("WebView2 initialized"))
