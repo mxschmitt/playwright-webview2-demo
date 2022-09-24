@@ -58,7 +58,8 @@ public class WebView2Test : PlaywrightTest
                 break;
             }
         }
-        Browser = await Playwright.Chromium.ConnectOverCDPAsync($"http://127.0.0.1:{cdpPort}");
+        var cdpAddress = $"http://127.0.0.1:{cdpPort}";
+        Browser = await Playwright.Chromium.ConnectOverCDPAsync(cdpAddress);
         Context = Browser.Contexts[0];
         Page = Context.Pages[0];
     }
