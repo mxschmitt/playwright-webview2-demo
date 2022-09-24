@@ -44,7 +44,7 @@ jobs:
         run: npx playwright test
         working-directory: node
 
-  test-dotnet:
+  test-dotnet-nunit:
     runs-on: windows-latest
     needs: build
     steps:
