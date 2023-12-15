@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import childProcess from 'child_process';
 
-const EXECUTABLE_PATH = path.join(__dirname, '../../webview2-app/bin/Debug/net6.0-windows/webview2.exe');
+const EXECUTABLE_PATH = path.join(__dirname, '../../webview2-app/bin/Debug/net8.0-windows/webview2.exe');
 
 export const test = base.extend({
   browser: async ({ playwright }, use, testInfo) => {
