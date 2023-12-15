@@ -12,7 +12,7 @@ EXECUTABLE_PATH = (
     / "webview2-app"
     / "bin"
     / "Debug"
-    / "net6.0-windows"
+    / "net8.0-windows"
     / "webview2.exe"
 )
 

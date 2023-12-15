@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import childProcess from 'child_process';
 
-const EXECUTABLE_PATH = path.join(__dirname, '../../webview2-app/bin/Debug/net6.0-windows/webview2.exe');
+const EXECUTABLE_PATH = path.join(__dirname, '../../webview2-app/bin/Debug/net8.0-windows/webview2.exe');
 
 export const test = base.extend({
   browser: async ({ playwright }, use, testInfo) => {
@@ -27,7 +27,7 @@ export const test = base.extend({
     await use(browser);
     await browser.close()
     childProcess.execSync(`taskkill /pid ${webView2Process.pid} /T /F`);
-    fs.rmdirSync(userDataDir, { recursive: true });
+    fs.rmdirSync(userDataDir, { recursive: true, maxRetries: 10 });
   },
   context: async ({ browser }, use) => {
     const context = browser.contexts()[0];

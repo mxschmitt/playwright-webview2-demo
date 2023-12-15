@@ -13,9 +13,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v2
+      - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.0.x'
       - name: Build
         run: dotnet build
         working-directory: webview2-app
@@ -36,7 +36,7 @@ jobs:
           path: webview2-app/bin/
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '20.x'
       - name: Install
         run: npm ci
         working-directory: node
@@ -53,9 +53,9 @@ jobs:
         with:
           name: webview2-app
           path: webview2-app/bin/
-      - uses: actions/setup-dotnet@v2
+      - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.0.x'
       - name: Test
         run: dotnet test
         working-directory: dotnet-nunit
@@ -88,7 +88,7 @@ jobs:
           path: webview2-app/bin/
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
       - name: Install
         run: pip install -r requirements.txt
         working-directory: python
