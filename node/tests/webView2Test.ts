@@ -27,7 +27,7 @@ export const test = base.extend({
     await use(browser);
     await browser.close()
     childProcess.execSync(`taskkill /pid ${webView2Process.pid} /T /F`);
-    fs.rmdirSync(userDataDir, { recursive: true });
+    fs.rmdirSync(userDataDir, { recursive: true, maxRetries: 10 });
   },
   context: async ({ browser }, use) => {
     const context = browser.contexts()[0];
